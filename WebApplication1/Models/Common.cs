@@ -1,6 +1,6 @@
 ﻿namespace WebApplication1.Models
 {
-    public class Utility
+    public class Common
     {
         public readonly static string Station = "ConnectionStrings:ricky";
     }

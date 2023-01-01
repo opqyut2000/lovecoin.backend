@@ -1,4 +1,5 @@
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -32,19 +33,20 @@ namespace WebApplication1.Controllers
 
        
         [HttpGet]
-        [Route("GetUsers")]
+        [Route("GetUser")]
+        [Authorize]
         public ActionResult GetUsers()
         {
-            var redisKey = "Production_GetUsers";
+            var redisKey = "Production_GetUser";
             try
             {
                 var redisData = _cache.GetString(redisKey);
                 if (redisData == null)
                 {
 
-                    var conn = new SqlConnection(_configuration[Utility.Station]);
+                    var conn = new SqlConnection(_configuration[Common.Station]);
 
-                    var sql = "SELECT * FROM tbUsers";
+                    var sql = "SELECT * FROM tbUser";
                     var results = conn.Query<dynamic>(sql).ToList();
 
                     var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(20));
@@ -76,7 +78,7 @@ namespace WebApplication1.Controllers
                 if (redisData == null)
                 {
 
-                    var conn = new SqlConnection(_configuration[Utility.Station]);
+                    var conn = new SqlConnection(_configuration[Common.Station]);
 
                     var sql = "SELECT * FROM tbProduction";
                     var results = conn.Query<dynamic>(sql).ToList();
@@ -109,7 +111,7 @@ namespace WebApplication1.Controllers
                 var redisData = _cache.GetString(redisKey);
                 if (redisData == null)
                 {
-                    var conn = new SqlConnection(_configuration[Utility.Station]);
+                    var conn = new SqlConnection(_configuration[Common.Station]);
 
                     var sql = "SELECT * FROM tbProduction";
                     var results = conn.Query<dynamic>(sql).ToList();
@@ -143,7 +145,7 @@ namespace WebApplication1.Controllers
                 if (redisData == null)
                 {
 
-                    var conn = new SqlConnection(_configuration[Utility.Station]);
+                    var conn = new SqlConnection(_configuration[Common.Station]);
 
                     var sql = "SELECT * FROM tbProduction";
                     var results = conn.Query<dynamic>(sql).ToList();

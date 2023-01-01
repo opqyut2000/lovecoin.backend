@@ -1,5 +1,7 @@
 using NLog.Web;
 using DistributedCache.Infrastructure;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var myCors = "_myCors";
@@ -11,15 +13,8 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:5173", "*", "*")
         //.AllowAnyOrigin()
         .AllowAnyHeader()
-        .AllowAnyMethod(); 
+        .AllowAnyMethod();
     });
-});
-
-
-builder.Host.ConfigureLogging(logging =>
-{
-    logging.ClearProviders();
-    logging.AddConsole();
 });
 
 
@@ -41,6 +36,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAuthentication()
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration.GetSection("JWT")["ValidIssuer"],
+                        ValidAudience = builder.Configuration.GetSection("JWT")["ValidAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT")["Secret"]))
+                    };
+                });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,17 +63,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 
 app.UseSession();
-app.Use(async (context, next) =>
-{
-    context.Session.SetString("SessionKey", "SessoinValue");
-    await next.Invoke();
-});
+
 app.UseRouting();
 app.UseCors(myCors);
+app.UseAuthorization();
 
 app.Run();
