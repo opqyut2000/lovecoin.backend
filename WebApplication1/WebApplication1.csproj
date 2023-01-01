@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DAO\**" />
+    <Content Remove="DAO\**" />
+    <EmbeddedResource Remove="DAO\**" />
+    <None Remove="DAO\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CSRedisCore" Version="3.8.669" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
@@ -31,6 +38,10 @@
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="test\" />
   </ItemGroup>
 
 </Project>
