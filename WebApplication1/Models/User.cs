@@ -1,8 +1,9 @@
-﻿namespace WebApplication1.Models
+﻿namespace WebApplication1.Models.Authentication
 {
-    public class User
+    public class UserViewModel
     {
         public string? Userid { get; set; }
         public string? Password { get; set; }
+        public string? Username { get; set; }
     }
 }

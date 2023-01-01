@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Caching.Distributed;
+using NuGet.Common;
 using System.Data;
 using System.Text;
 using System.Text.Json;
@@ -37,6 +38,8 @@ namespace WebApplication1.Controllers
         [Authorize]
         public ActionResult GetUsers()
         {
+            var test = User.Identity.Name;
+
             var redisKey = "Production_GetUser";
             try
             {

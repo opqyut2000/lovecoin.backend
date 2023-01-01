@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
@@ -6,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApplication1.Models;
+using WebApplication1.Models.Authentication;
 
 namespace WebApplication1.Controllers
 {
@@ -22,32 +24,33 @@ namespace WebApplication1.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpPost("token")]
-        public IActionResult Login([FromBody] User user)
+        public IActionResult Login([FromBody] Login request)
         {
-            if (user is null)
+            if (request is null)
             {
                 return BadRequest("Invalid user request!!!");
             }
             var dapperParam = new DynamicParameters();
             var SqlParam = new List<string>();
-            if (user.Userid != null)
+            if (request.Userid != null)
             {
                 SqlParam.Add("userid = @userid");
-                dapperParam.Add("userid", user.Userid);
+                dapperParam.Add("userid", request.Userid);
             }
-            if (user.Password != null)
+            if (request.Password != null)
             {
                 SqlParam.Add("password = @password");
-                dapperParam.Add("password", user.Password);
+                dapperParam.Add("password", request.Password);
             }
             var conn = new SqlConnection(_configuration[Common.Station]);
 
             string where_condition = SqlParam.Any() ? $"where {string.Join(" and ", SqlParam)}" : string.Empty;
             var sql = $"SELECT * FROM tbUser {where_condition}";
-            var results = conn.Query<User>(sql, dapperParam).ToList();
+            var results = conn.Query<UserViewModel>(sql, dapperParam).ToList();
 
-            if (user.Userid == "Jaydeep" && user.Password == "Pass@777")
+            if (results.Count > 0)
             {
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -55,7 +58,7 @@ namespace WebApplication1.Controllers
                     issuer: _configuration["JWT:ValidIssuer"],
                     audience: _configuration["JWT:ValidAudience"],
                     claims: new List<Claim>(),
-                    expires: DateTime.Now.AddMinutes(6),
+                    expires: DateTime.Now.AddMinutes(10),
                     signingCredentials: signinCredentials
                 );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
