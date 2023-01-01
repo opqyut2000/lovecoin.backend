@@ -1,6 +1,6 @@
-﻿namespace WebApplication1.Models.Authentication
+﻿namespace WebApplication1.DAO
 {
-    public class UserViewModel
+    public class tbUser
     {
         public string? Userid { get; set; }
         public string? Password { get; set; }

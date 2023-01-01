@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApplication1.DAO;
 using WebApplication1.Models;
 using WebApplication1.Models.Authentication;
 
@@ -48,7 +49,7 @@ namespace WebApplication1.Controllers
 
             string where_condition = SqlParam.Any() ? $"where {string.Join(" and ", SqlParam)}" : string.Empty;
             var sql = $"SELECT * FROM tbUser {where_condition}";
-            var results = conn.Query<UserViewModel>(sql, dapperParam).ToList();
+            var results = conn.Query<tbUser>(sql, dapperParam).ToList();
 
             if (results.Count > 0)
             {

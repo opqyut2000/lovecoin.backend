@@ -2,8 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApplication1.DAO;
 using WebApplication1.Models;
-using WebApplication1.Models.Authentication;
 
 namespace WebApplication1.Helpers
 {
@@ -15,7 +15,7 @@ namespace WebApplication1.Helpers
         {
             this._configuration = configuration;
         }
-        public object GenerateToken(UserViewModel model, int expireMinutes = 30)
+        public object GenerateToken(tbUser model, int expireMinutes = 30)
         {
             var issuer = _configuration.GetValue<string>("JwtSettings:Issuer");
             var signKey = _configuration.GetValue<string>("JwtSettings:SignKey");

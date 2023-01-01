@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.IdentityModel.Tokens.Jwt;
+using WebApplication1.DAO;
 using WebApplication1.Helpers;
 using WebApplication1.Models;
-using WebApplication1.Models.Authentication;
 
 namespace WebApplication1.Controllers
 {
@@ -43,7 +43,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        private UserViewModel ValidateUser(LoginModel request)
+        private tbUser ValidateUser(LoginModel request)
         {
             var dapperParam = new DynamicParameters();
             var SqlParam = new List<string>();
@@ -61,7 +61,7 @@ namespace WebApplication1.Controllers
 
             string where_condition = SqlParam.Any() ? $"where {string.Join(" and ", SqlParam)}" : string.Empty;
             var sql = $"SELECT * FROM tbUser {where_condition}";
-            var results = conn.QuerySingleOrDefault<UserViewModel>(sql, dapperParam);
+            var results = conn.QuerySingleOrDefault<tbUser>(sql, dapperParam);
 
             return results;
         }
