@@ -8,6 +8,7 @@ using NuGet.Common;
 using System.Data;
 using System.Text;
 using System.Text.Json;
+using WebApplication1.DbModels;
 using WebApplication1.Models;
 using WebApplication1.Models.Production;
 
@@ -46,10 +47,10 @@ namespace WebApplication1.Controllers
                 var redisData = _cache.GetString(redisKey);
                 if (redisData == null)
                 {
-                    var conn = new SqlConnection(_configuration[Common.Station]);
+                    var conn = new SqlConnection(_configuration[Common.LoveCoin]);
 
-                    var sql = "SELECT * FROM tbUser";
-                    var results = conn.Query<dynamic>(sql).ToList();
+                    var sql = "SELECT * FROM TbUser";
+                    var results = conn.Query<TbUser>(sql).ToList();
 
                     var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(20));
                     _cache.SetStringAsync(redisKey, JsonSerializer.Serialize(results), options);
@@ -79,10 +80,10 @@ namespace WebApplication1.Controllers
                 var redisData = _cache.GetString(redisKey);
                 if (redisData == null)
                 {
-                    var conn = new SqlConnection(_configuration[Common.Station]);
+                    var conn = new SqlConnection(_configuration[Common.LoveCoin]);
 
-                    var sql = "SELECT * FROM tbProduction";
-                    var results = conn.Query<dynamic>(sql).ToList();
+                    var sql = "SELECT * FROM TbProduction";
+                    var results = conn.Query<TbProduction>(sql).ToList();
 
                     var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(20));
                     _cache.SetStringAsync(redisKey, JsonSerializer.Serialize(results), options);
@@ -112,7 +113,7 @@ namespace WebApplication1.Controllers
                 var redisData = _cache.GetString(redisKey);
                 if (redisData == null)
                 {
-                    var conn = new SqlConnection(_configuration[Common.Station]);
+                    var conn = new SqlConnection(_configuration[Common.LoveCoin]);
 
                     var sql = "SELECT * FROM tbProduction";
                     var results = conn.Query<dynamic>(sql).ToList();
@@ -146,7 +147,7 @@ namespace WebApplication1.Controllers
                 if (redisData == null)
                 {
 
-                    var conn = new SqlConnection(_configuration[Common.Station]);
+                    var conn = new SqlConnection(_configuration[Common.LoveCoin]);
 
                     var sql = "SELECT * FROM tbProduction";
                     var results = conn.Query<dynamic>(sql).ToList();

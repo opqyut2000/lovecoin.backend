@@ -27,7 +27,7 @@ namespace WebApplication1.Helpers
                 SqlParam.Add("password = @password");
                 dapperParam.Add("password", request.Password);
             }
-            var conn = new SqlConnection(_configuration[Common.Station]);
+            var conn = new SqlConnection(_configuration[Common.LoveCoin]);
 
             string where_condition = SqlParam.Any() ? $"where {string.Join(" and ", SqlParam)}" : string.Empty;
             var sql = $"SELECT * FROM tbUser {where_condition}";

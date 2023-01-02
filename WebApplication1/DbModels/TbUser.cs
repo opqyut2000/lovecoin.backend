@@ -10,4 +10,6 @@ public partial class TbUser
     public string Password { get; set; } = null!;
 
     public string? Username { get; set; }
+
+    public string? Email { get; set; }
 }

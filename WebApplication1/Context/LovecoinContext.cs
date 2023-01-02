@@ -40,11 +40,12 @@ public partial class LovecoinContext : DbContext
         {
             entity.HasKey(e => e.AccountId).HasName("PK_agent_1");
 
-            entity.ToTable("tbAccount");
+            entity.ToTable("TbAccount");
 
             entity.Property(e => e.AccountId)
                 .HasMaxLength(12)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasComment("管理帳號");
             entity.Property(e => e.Password)
                 .HasMaxLength(12)
                 .IsUnicode(false);
@@ -52,77 +53,96 @@ public partial class LovecoinContext : DbContext
 
         modelBuilder.Entity<TbOrder>(entity =>
         {
-            entity.HasKey(e => e.OrderId);
+            entity.HasKey(e => e.OrderId).HasName("PK_tbOrder");
 
-            entity.ToTable("tbOrder");
+            entity.ToTable("TbOrder");
 
-            entity.Property(e => e.OrderId).HasColumnName("Order_Id");
+            entity.Property(e => e.OrderId).HasComment("訂單ID");
             entity.Property(e => e.CreateTime)
                 .HasDefaultValueSql("(getdate())")
+                .HasComment("建立時間")
                 .HasColumnType("datetime");
             entity.Property(e => e.Userid)
                 .HasMaxLength(30)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasComment("用戶ID");
         });
 
         modelBuilder.Entity<TbOrderProduction>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ProductionId });
+            entity.HasKey(e => new { e.OrderId, e.ProductionId }).HasName("PK_tbOrder_Production");
 
-            entity.ToTable("tbOrder_Production");
+            entity.ToTable("TbOrder_Production");
 
-            entity.Property(e => e.OrderId).HasColumnName("Order_Id");
-            entity.Property(e => e.ProductionId).HasColumnName("Production_Id");
+            entity.Property(e => e.OrderId).HasComment("訂單ID");
+            entity.Property(e => e.ProductionId).HasComment("產品ID");
         });
 
         modelBuilder.Entity<TbPoductionImage>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToTable("tbPoduction_images");
+                .ToTable("TbPoduction_images");
 
-            entity.Property(e => e.ImageId).HasColumnName("Image_Id");
-            entity.Property(e => e.ImageUrl).HasMaxLength(100);
+            entity.Property(e => e.ImageId).HasComment("圖片ID");
+            entity.Property(e => e.ImageUrl)
+                .HasMaxLength(100)
+                .HasComment("圖片位置");
+            entity.Property(e => e.Orderby).HasComment("排序");
         });
 
         modelBuilder.Entity<TbProduction>(entity =>
         {
-            entity.HasKey(e => e.ProductionId);
+            entity.HasKey(e => e.ProductionId).HasName("PK_tbProduction");
 
-            entity.ToTable("tbProduction");
+            entity.ToTable("TbProduction");
 
-            entity.Property(e => e.ProductionId).HasColumnName("Production_Id");
+            entity.Property(e => e.ProductionId).HasComment("產品ID");
             entity.Property(e => e.CreateTime)
                 .HasDefaultValueSql("(getdate())")
+                .HasComment("建立時間")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Description).HasMaxLength(100);
-            entity.Property(e => e.ImageId).HasColumnName("Image_Id");
-            entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.Title).HasMaxLength(50);
-            entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+            entity.Property(e => e.Description)
+                .HasMaxLength(100)
+                .HasComment("商品描述");
+            entity.Property(e => e.ImageId).HasComment("圖片ID");
+            entity.Property(e => e.IsMarket).HasComment("是否上架");
+            entity.Property(e => e.IsSold).HasComment("是否售出");
+            entity.Property(e => e.Orderby).HasComment("排序");
+            entity.Property(e => e.Price)
+                .HasComment("價格")
+                .HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Title)
+                .HasMaxLength(50)
+                .HasComment("標題");
+            entity.Property(e => e.UpdateTime)
+                .HasComment("更新時間")
+                .HasColumnType("datetime");
         });
 
         modelBuilder.Entity<TbShoppingcart>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToTable("tbShoppingcart");
+                .ToTable("TbShoppingcart");
 
-            entity.Property(e => e.ProductionId).HasColumnName("Production_Id");
+            entity.Property(e => e.ProductionId).HasComment("產品ID");
             entity.Property(e => e.UserId)
                 .HasMaxLength(30)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasComment("用戶名");
         });
 
         modelBuilder.Entity<TbUser>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK_t_customer");
 
-            entity.ToTable("tbUser");
+            entity.ToTable("TbUser");
 
             entity.Property(e => e.UserId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.Password)
                 .HasMaxLength(12)
                 .IsUnicode(false);

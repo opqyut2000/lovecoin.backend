@@ -2,6 +2,6 @@
 {
     public class Common
     {
-        public readonly static string Station = "ConnectionStrings:ricky";
+        public readonly static string LoveCoin = "ConnectionStrings:ricky";
     }
 }
