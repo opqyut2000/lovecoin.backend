@@ -1,10 +1,6 @@
 ﻿namespace WebApplication1.Models.Production
 {
-    public class Production_Model
-    {
-    }
-
-    public class Production_PModel
+      public class Production_PModel
     {
         public string ProductionId { get; set; }
         public string ProductionName { get; set; }

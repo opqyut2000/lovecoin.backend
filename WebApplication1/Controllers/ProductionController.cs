@@ -46,7 +46,6 @@ namespace WebApplication1.Controllers
                 var redisData = _cache.GetString(redisKey);
                 if (redisData == null)
                 {
-
                     var conn = new SqlConnection(_configuration[Common.Station]);
 
                     var sql = "SELECT * FROM tbUser";
@@ -80,7 +79,6 @@ namespace WebApplication1.Controllers
                 var redisData = _cache.GetString(redisKey);
                 if (redisData == null)
                 {
-
                     var conn = new SqlConnection(_configuration[Common.Station]);
 
                     var sql = "SELECT * FROM tbProduction";
@@ -106,7 +104,7 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [Route("GetProductionList")]
-        public ActionResult GetProductionList(ProductionApiRuqest Request)
+        public ActionResult GetProductionList(ProductionRuqest Request)
         {
             var redisKey = "Production_GetProductionList";
             try
